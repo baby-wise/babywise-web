@@ -410,3 +410,97 @@
     bottom: 20px;
   }
 }
+
+/* Modal de Audio */
+.audio-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.audio-modal-container {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.audio-modal-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.empty-container {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: #888;
+}
+
+.audio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.audio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 16px;
+  color: #333;
+}
+
+.audio-item:hover {
+  background-color: #e9ecef;
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.audio-item:active {
+  transform: translateY(0);
+}
+
+.audio-modal-close {
+  width: 100%;
+  padding: 12px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.audio-modal-close:hover {
+  background-color: #5a6268;
+}
+
+.audio-modal-close:active {
+  background-color: #545b62;
+}

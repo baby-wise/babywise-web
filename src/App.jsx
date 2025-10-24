@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { routes, navRoutes } from './routes/routes'
 import { auth } from './config/firebase'
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
+import { SocketProvider } from './contexts/SocketContext.jsx'
 import './App.css'
 
 function App() {
@@ -63,19 +64,20 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="app">
-        <nav className="navbar">
-          <div className="nav-container">
-            <h1 className="logo">BabyWise Web</h1>
-            <div className="nav-right">
-              <ul className="nav-links">
-                {navRoutes.map((route) => (
-                  <li key={route.path}>
-                    <Link to={route.path}>{route.name}</Link>
-                  </li>
-                ))}
-              </ul>
+    <SocketProvider>
+      <Router>
+        <div className="app">
+          <nav className="navbar">
+            <div className="nav-container">
+              <h1 className="logo">BabyWise Web</h1>
+              <div className="nav-right">
+                <ul className="nav-links">
+                  {navRoutes.map((route) => (
+                    <li key={route.path}>
+                      <Link to={route.path}>{route.name}</Link>
+                    </li>
+                  ))}
+                </ul>
               
               {/* Ícono de perfil en navbar */}
               <div className="nav-profile">
@@ -153,6 +155,7 @@ function App() {
         </footer>
       </div>
     </Router>
+    </SocketProvider>
   )
 }
 

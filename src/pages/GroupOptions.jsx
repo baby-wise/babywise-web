@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { groupService } from '../services/apiService';
 import { auth } from '../config/firebase';
+import CameraThumbnailPreview from '../components/CameraThumbnailPreview';
 import { 
   MdArrowBack, 
   MdSettings, 
@@ -11,7 +12,8 @@ import {
   MdPlayArrow,
   MdVideocamOff,
   MdAccountCircle,
-  MdPersonRemove
+  MdPersonRemove,
+  MdRefresh
 } from 'react-icons/md';
 import './GroupOptions.css';
 
@@ -62,6 +64,9 @@ const GroupOptions = () => {
   // Estados para toast
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  
+  // Estado para runtime status de cámaras
+  const [camerasRuntimeStatus, setCamerasRuntimeStatus] = useState({});
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -357,6 +362,15 @@ const GroupOptions = () => {
     showSuccessToast('Código copiado al portapapeles');
   };
 
+  // Manejar cuando una cámara se desconecta
+  const handleCameraDisconnected = (cameraId) => {
+    console.log('[GroupOptions] Cámara desconectada:', cameraId);
+    setCamerasRuntimeStatus(prev => ({
+      ...prev,
+      [cameraId]: 'OFFLINE'
+    }));
+  };
+
   // Manejar click en cámara (para abrir menú de opciones)
   const handleCameraClick = (event, camera) => {
     event.preventDefault();
@@ -426,8 +440,17 @@ const GroupOptions = () => {
         <p className="group-subtitle">{group.members || 0} miembros</p>
       </div>
 
-      {/* Título de cámaras */}
-      <h2 className="section-title">Cámaras</h2>
+      {/* Título de cámaras con botón de refresh */}
+      <div className="section-header">
+        <h2 className="section-title">Cámaras</h2>
+        <button 
+          className={`refresh-button ${refreshing ? 'spinning' : ''}`}
+          onClick={onRefresh}
+          disabled={refreshing}
+        >
+          <MdRefresh size={24} />
+        </button>
+      </div>
 
       {/* Lista de cámaras */}
       <div className="camera-list-container">
@@ -438,7 +461,9 @@ const GroupOptions = () => {
         ) : fetchedCameras && fetchedCameras.length > 0 ? (
           fetchedCameras.map((cam, idx) => {
             const cameraId = cam._id || cam.user || idx;
-            const isOnline = cam.status === 'ONLINE';
+            const runtimeStatus = camerasRuntimeStatus[cameraId];
+            const effectiveStatus = runtimeStatus || cam.status;
+            const isCurrentlyOnline = effectiveStatus === 'ONLINE';
 
             return (
               <div 
@@ -447,12 +472,14 @@ const GroupOptions = () => {
                 onClick={(e) => handleCameraClick(e, cam)}
               >
                 <div className="camera-avatar-vertical">
-                  {isOnline ? (
+                  {isCurrentlyOnline ? (
                     <>
-                      {/* Aquí iría el componente de preview de video */}
-                      <div className="video-preview-placeholder">
-                        <span>Video Preview</span>
-                      </div>
+                      <CameraThumbnailPreview
+                        roomId={group._id || groupId}
+                        cameraName={cam.name}
+                        isOnline={true}
+                        onDisconnected={() => handleCameraDisconnected(cameraId)}
+                      />
                       <div className="live-badge">
                         <div className="live-indicator"></div>
                         <span className="live-text">EN VIVO</span>
@@ -511,7 +538,9 @@ const GroupOptions = () => {
             className="media-menu-option"
             onClick={() => {
               setShowMediaModal(false);
-              // navigate to audio list
+              navigate(`/audios/${groupId}`, {
+                state: { group }
+              });
             }}
           >
             <span className="media-menu-text">Audios</span>
@@ -521,7 +550,7 @@ const GroupOptions = () => {
             className="media-menu-option last"
             onClick={() => {
               setShowMediaModal(false);
-              // navigate to recordings list
+              navigate(`/recordings/${groupId}`);
             }}
           >
             <span className="media-menu-text">Grabaciones</span>
@@ -775,7 +804,7 @@ const GroupOptions = () => {
               className="camera-option-button"
               onClick={() => {
                 setShowCameraOptionsModal(false);
-                // navigate to recordings
+                navigate(`/recordings/${groupId}`, { state: { babyName: selectedCamera } });
               }}
             >
               Ver grabaciones

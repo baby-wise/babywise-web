@@ -6,6 +6,7 @@ import axios from 'axios';
 import { MdArrowBack, MdBrightness2, MdBrightness5, MdBarChart, MdMic, MdMusicNote, MdSupportAgent } from 'react-icons/md';
 import SIGNALING_SERVER_URL from '../config/serverUrl';
 import { auth } from '../config/firebase';
+import { useSocket } from '../contexts/SocketContext.jsx';
 import './Viewer.css';
 
 const Viewer = () => {
@@ -106,12 +107,17 @@ const RoomView = ({ navigate, group, groupId, userName, cameraName }) => {
   const tracks = useTracks([Track.Source.Camera]);
   const remoteParticipants = useRemoteParticipants();
   const { localParticipant } = useLocalParticipant();
+  const socket = useSocket();
   
   // Estados
   const [selectedCamera, setSelectedCamera] = useState(null);
   const [isTalking, setIsTalking] = useState(false);
   const [nightVision, setNightVision] = useState(false);
   const [speakingViewers, setSpeakingViewers] = useState([]);
+  const [audioModalVisible, setAudioModalVisible] = useState(false);
+  const [reproduciendoAudio, setReproduciendoAudio] = useState(false);
+  const [audios, setAudios] = useState([]);
+  const [loadingAudios, setLoadingAudios] = useState(false);
   
   // Filtrar solo participantes que son cámaras
   const cameraTracks = tracks.filter(t => 
@@ -122,6 +128,56 @@ const RoomView = ({ navigate, group, groupId, userName, cameraName }) => {
   );
 
   const hasSelectedInitialCamera = useRef(false);
+
+  // Unirse a la sala como viewer cuando el socket esté listo
+  useEffect(() => {
+    if (socket && socket.connected) {
+      socket.emit('join-room', {
+        group: groupId,
+        role: 'viewer',
+        groupId: groupId,
+        UID: auth.currentUser?.uid,
+      });
+    }
+  }, [socket, groupId]);
+
+  // Escuchar eventos de audio para mostrar/ocultar botón detener
+  useEffect(() => {
+    if (!socket) return;
+    
+    const handlePlayAudio = () => setReproduciendoAudio(true);
+    const handleStopAudio = () => setReproduciendoAudio(false);
+    
+    socket.on('play-audio', handlePlayAudio);
+    socket.on('stop-audio', handleStopAudio);
+    
+    return () => {
+      socket.off('play-audio', handlePlayAudio);
+      socket.off('stop-audio', handleStopAudio);
+    };
+  }, [socket]);
+
+  // Cargar audios cuando se abre el modal
+  useEffect(() => {
+    if (!audioModalVisible) return;
+    
+    const fetchAudios = async () => {
+      try {
+        setLoadingAudios(true);
+        const res = await axios.get(`${SIGNALING_SERVER_URL}/audios`, {
+          params: { room: groupId }
+        });
+        setAudios(res.data.audios || []);
+      } catch (err) {
+        console.error('Error cargando audios:', err);
+        setAudios([]);
+      } finally {
+        setLoadingAudios(false);
+      }
+    };
+    
+    fetchAudios();
+  }, [audioModalVisible, groupId]);
 
   // Seleccionar cámara inicial
   useEffect(() => {
@@ -250,6 +306,49 @@ const RoomView = ({ navigate, group, groupId, userName, cameraName }) => {
     }
   };
 
+  // Funciones para manejar reproducción de audio
+  const handlePlayAudio = (audio) => {
+    if (!socket) {
+      alert('No hay conexión con el servidor');
+      return;
+    }
+    
+    const cameraIdentity = selectedCamera?.replace('camera-', '');
+    if (!cameraIdentity) {
+      alert('No hay cámara seleccionada');
+      return;
+    }
+    
+    socket.emit('play-audio', {
+      group: groupId,
+      cameraIdentity,
+      audioUrl: audio.url,
+    });
+    
+    setReproduciendoAudio(true);
+    setAudioModalVisible(false);
+  };
+
+  const handleStopAudio = () => {
+    if (!socket) {
+      alert('No hay conexión con el servidor');
+      return;
+    }
+    
+    const cameraIdentity = selectedCamera?.replace('camera-', '');
+    if (!cameraIdentity) {
+      alert('No hay cámara seleccionada');
+      return;
+    }
+    
+    socket.emit('stop-audio', {
+      group: groupId,
+      cameraIdentity,
+    });
+    
+    setReproduciendoAudio(false);
+  };
+
   const selectedTrack = cameraTracks.find(t => t.participant.identity === selectedCamera);
 
   return (
@@ -364,18 +463,61 @@ const RoomView = ({ navigate, group, groupId, userName, cameraName }) => {
           {/* Botón de audio - derecha */}
           {selectedCamera && (
             <button
-              className="floating-button audio-button"
-              onClick={() => {
-                // TODO: Implementar reproducción de audio
-                console.log('Play audio');
-              }}
-              title="Reproducir audio"
+              className={`floating-button audio-button ${reproduciendoAudio ? 'playing' : ''}`}
+              onClick={() => reproduciendoAudio ? handleStopAudio() : setAudioModalVisible(true)}
+              title={reproduciendoAudio ? "Detener audio" : "Reproducir audio"}
             >
               <MdMusicNote size={28} />
             </button>
           )}
         </div>
       </div>
+
+      {/* Modal de selección de audio */}
+      {audioModalVisible && (
+        <div className="audio-modal-overlay" onClick={() => setAudioModalVisible(false)}>
+          <div className="audio-modal-container" onClick={(e) => e.stopPropagation()}>
+            <h2 className="audio-modal-title">Seleccionar Audio</h2>
+            
+            {loadingAudios ? (
+              <div className="loading-container">
+                <div className="spinner"></div>
+                <p className="loading-text">Cargando audios...</p>
+              </div>
+            ) : audios.length === 0 ? (
+              <div className="empty-container">
+                <p className="empty-text">No hay audios disponibles</p>
+              </div>
+            ) : (
+              <div className="audio-list">
+                {audios.map((audio) => {
+                  const audioName = audio.key
+                    .replace(`audio/${groupId}/`, '')
+                    .replace(/\.[^/.]+$/, '');
+                  
+                  return (
+                    <button 
+                      key={audio.key}
+                      className="audio-item"
+                      onClick={() => handlePlayAudio(audio)}
+                    >
+                      <MdMusicNote size={24} />
+                      <span>{audioName}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            
+            <button 
+              className="audio-modal-close"
+              onClick={() => setAudioModalVisible(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
