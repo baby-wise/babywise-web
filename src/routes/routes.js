@@ -3,6 +3,7 @@ import { lazy } from 'react'
 // Lazy loading de páginas para mejor performance
 const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
+const HomeGroups = lazy(() => import('../pages/HomeGroups'))
 
 // Configuración de rutas
 export const routes = [
@@ -16,6 +17,12 @@ export const routes = [
     path: '/about',
     element: About,
     name: 'Acerca de',
+    showInNav: true,
+  },
+  {
+    path: '/groups',
+    element: HomeGroups,
+    name: 'Mis Grupos',
     showInNav: true,
   },
   // Agrega más rutas aquí:
