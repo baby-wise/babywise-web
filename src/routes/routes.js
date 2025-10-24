@@ -4,6 +4,8 @@ import { lazy } from 'react'
 const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
 const HomeGroups = lazy(() => import('../pages/HomeGroups'))
+const GroupOptions = lazy(() => import('../pages/GroupOptions'))
+const Viewer = lazy(() => import('../pages/Viewer'))
 
 // Configuración de rutas
 export const routes = [
@@ -24,6 +26,18 @@ export const routes = [
     element: HomeGroups,
     name: 'Mis Grupos',
     showInNav: true,
+  },
+  {
+    path: '/group/:groupId',
+    element: GroupOptions,
+    name: 'Opciones de Grupo',
+    showInNav: false,
+  },
+  {
+    path: '/viewer/:groupId/:cameraName',
+    element: Viewer,
+    name: 'Visor de Cámara',
+    showInNav: false,
   },
   // Agrega más rutas aquí:
   // {

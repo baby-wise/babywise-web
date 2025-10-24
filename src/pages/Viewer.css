@@ -1,0 +1,412 @@
+.viewer-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.tracks-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Video */
+.video-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.video-track {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay de controles - encima del video */
+.controls-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.controls-overlay > * {
+  pointer-events: auto;
+}
+
+/* Overlay de visión nocturna */
+.night-vision-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.night-vision-layer-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.25);
+  mix-blend-mode: screen;
+}
+
+.night-vision-layer-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(180, 255, 180, 0.08);
+}
+
+.night-vision-layer-3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* Mensaje de espera */
+.waiting-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+}
+
+.waiting-text {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Botón de regreso */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Título con nombre del bebé */
+.title-container {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+}
+
+.title-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+/* Selector de cámaras */
+.camera-buttons-row {
+  position: absolute;
+  top: 140px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  z-index: 10;
+  flex-wrap: wrap;
+}
+
+.camera-item {
+  padding: 6px 14px;
+  border-radius: 16px;
+  background-color: #eee;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 36px;
+  min-width: 36px;
+}
+
+.camera-item:hover {
+  background-color: #ddd;
+  transform: scale(1.05);
+}
+
+.camera-item.selected {
+  background-color: #007AFF;
+  border-color: #007AFF;
+  color: white;
+}
+
+/* Botones superiores derecha */
+.top-right-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.icon-button {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Indicador de hablando */
+.speaking-indicator {
+  position: absolute;
+  top: 200px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+}
+
+.speaking-text {
+  color: #00FF00;
+  font-weight: bold;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+/* Controles inferiores */
+.controls-container {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px;
+  z-index: 10;
+}
+
+.floating-button {
+  background-color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.floating-button:hover {
+  transform: scale(1.05);
+}
+
+.floating-button:active {
+  transform: scale(0.95);
+}
+
+/* Botón de hablar (centro) */
+.talk-button {
+  width: 70px;
+  height: 70px;
+  margin: 0 20px;
+}
+
+.talk-button.active {
+  background-color: #007AFF;
+}
+
+/* Botón de estadísticas (izquierda) */
+.agent-button {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  left: 40px;
+  color: var(--color-primary);
+}
+
+/* Botón de audio (derecha) */
+.audio-button {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  right: 40px;
+  color: var(--color-primary);
+}
+
+.audio-button.playing {
+  background-color: #d9534f;
+  color: white;
+}
+
+/* Loading y error */
+.loading-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+}
+
+.loading-text {
+  color: white;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.error-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+}
+
+.error-text {
+  color: #ff4444;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Spinner */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top: 5px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .title-text {
+    font-size: 16px;
+  }
+
+  .camera-item {
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+
+  .controls-container {
+    padding: 0 20px;
+  }
+
+  .agent-button {
+    left: 20px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .talk-button {
+    width: 60px;
+    height: 60px;
+  }
+
+  .audio-button {
+    right: 20px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .top-right-buttons {
+    gap: 5px;
+  }
+
+  .icon-button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Ajustes para pantalla completa */
+@media (orientation: landscape) and (max-width: 1024px) {
+  .title-container {
+    top: 20px;
+  }
+
+  .camera-buttons-row {
+    top: 60px;
+  }
+
+  .speaking-indicator {
+    top: 100px;
+  }
+
+  .controls-container {
+    bottom: 20px;
+  }
+}

@@ -373,8 +373,8 @@ const HomeGroups = () => {
       alert('Debes iniciar sesión para unirte a un grupo')
       return
     }
-    // TODO: Navegar a la pantalla de opciones del grupo
-    navigate(`/group/${group.id}`, { state: { group, userName: getUserName() } })
+    // Navegar a la pantalla de opciones del grupo
+    navigate(`/group/${group._id || group.id}`, { state: { group, userName: getUserName() } })
   }
 
   return (
