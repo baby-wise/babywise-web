@@ -131,14 +131,43 @@ const RoomView = ({ navigate, group, groupId, userName, cameraName }) => {
 
   // Unirse a la sala como viewer cuando el socket esté listo
   useEffect(() => {
-    if (socket && socket.connected) {
+    if (!socket) {
+      console.log('[Viewer] Socket no disponible aún');
+      return;
+    }
+
+    const joinRoom = () => {
+      if (!auth.currentUser) {
+        console.error('[Viewer] Usuario no autenticado');
+        return;
+      }
+
+      console.log('[Viewer] Emitiendo join-room:', {
+        group: groupId,
+        role: 'viewer',
+        groupId: groupId,
+        UID: auth.currentUser.uid,
+      });
+
       socket.emit('join-room', {
         group: groupId,
         role: 'viewer',
         groupId: groupId,
-        UID: auth.currentUser?.uid,
+        UID: auth.currentUser.uid,
       });
+    };
+
+    // Unirse inmediatamente si ya está conectado
+    if (socket.connected) {
+      joinRoom();
     }
+
+    // También escuchar el evento 'connect' por si se reconecta
+    socket.on('connect', joinRoom);
+
+    return () => {
+      socket.off('connect', joinRoom);
+    };
   }, [socket, groupId]);
 
   // Escuchar eventos de audio para mostrar/ocultar botón detener

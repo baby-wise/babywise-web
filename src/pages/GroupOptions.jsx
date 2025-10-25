@@ -314,11 +314,12 @@ const GroupOptions = () => {
     
     try {
       await groupService.addCamera(groupId, cameraName.trim());
+      const trimmedName = cameraName.trim();
       setShowCameraNameModal(false);
       setCameraName('');
       
-      // Aquí deberías navegar a la pantalla de cámara cuando esté implementada
-      // navigate(`/camera/${groupId}/${cameraName.trim()}`);
+      // Navegar a la pantalla de cámara
+      navigate(`/camera/${groupId}/${trimmedName}`, { state: { group } });
       
       showSuccessToast('Cámara agregada correctamente');
       await fetchCamerasFromBackend();
@@ -794,7 +795,7 @@ const GroupOptions = () => {
               className="camera-option-button"
               onClick={() => {
                 setShowCameraOptionsModal(false);
-                // navigate to camera
+                navigate(`/camera/${groupId}/${selectedCamera?.name}`, { state: { group } });
               }}
             >
               Grabar en vivo

@@ -9,7 +9,7 @@ const Viewer = lazy(() => import('../pages/Viewer'))
 const AudioList = lazy(() => import('../pages/AudioList'))
 const RecordingsList = lazy(() => import('../pages/RecordingsList'))
 const RecordingPlayer = lazy(() => import('../pages/RecordingPlayer'))
-const CameraScreen = lazy(() => import('../pages/CameraScreen'))
+const Camera = lazy(() => import('../pages/Camera'))
 
 // Configuración de rutas
 export const routes = [
@@ -63,7 +63,7 @@ export const routes = [
   },
   {
     path: '/camera/:groupId/:cameraName',
-    element: CameraScreen,
+    element: Camera,
     name: 'Cámara',
     showInNav: false,
   },
