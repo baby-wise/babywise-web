@@ -1,0 +1,233 @@
+.camera-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.camera-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  z-index: 20;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.camera-back-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.camera-back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.camera-status {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 16px;
+  border-radius: 20px;
+  z-index: 20;
+}
+
+.status-text {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rotate-button {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.rotate-button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+  transform: scale(1.05);
+}
+
+.rotate-button:active {
+  transform: scale(0.95);
+}
+
+/* Title */
+.camera-title {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px 20px;
+  border-radius: 8px;
+  z-index: 20;
+}
+
+.camera-title h2 {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Error message */
+.camera-error {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(239, 68, 68, 0.9);
+  padding: 10px 20px;
+  border-radius: 8px;
+  z-index: 20;
+}
+
+.camera-error p {
+  color: white;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Tracks container */
+.camera-tracks-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-waiting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.camera-waiting p {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
+/* Loading state */
+.camera-loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.camera-loading .spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.camera-loading p {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* LiveKit room container */
+.lk-room-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .camera-header {
+    padding: 16px;
+  }
+
+  .camera-title h2 {
+    font-size: 18px;
+  }
+
+  .camera-status {
+    top: 16px;
+  }
+
+  .status-text {
+    font-size: 13px;
+  }
+
+  .rotate-button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .camera-header {
+    padding: 12px;
+  }
+
+  .camera-title {
+    top: 60px;
+  }
+
+  .camera-title h2 {
+    font-size: 16px;
+  }
+
+  .rotate-button {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Hide audio element */
+audio {
+  display: none;
+}
