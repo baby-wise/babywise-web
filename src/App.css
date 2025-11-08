@@ -9,27 +9,41 @@
   color: var(--color-white);
   padding: 1rem 0;
   box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 100;
 }
 
 .nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  width: 100%;
+  padding: 0 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.3s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.9;
 }
 
 .logo {
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .nav-right {
   display: flex;
   align-items: center;
   gap: 2rem;
+  margin-left: auto;
 }
 
 .nav-links {
@@ -56,23 +70,15 @@
 
 .main-content {
   flex: 1;
-  max-width: 1200px;
   width: 100%;
+}
+
+/* Para páginas que necesitan padding tradicional */
+.page-container {
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-}
-
-.footer {
-  background-color: var(--color-text);
-  color: var(--color-white);
-  text-align: center;
-  padding: 1.5rem 0;
-  margin-top: auto;
-  box-shadow: var(--shadow-md);
-}
-
-.footer p {
-  margin: 0;
+  min-height: calc(100vh - 200px);
 }
 
 /* Perfil en navbar */
@@ -191,6 +197,14 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .nav-container {
+    padding: 0 1rem;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
   .nav-right {
     gap: 1rem;
   }
@@ -201,6 +215,7 @@
   
   .nav-links a {
     padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
   }
 }
 

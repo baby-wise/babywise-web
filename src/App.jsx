@@ -69,7 +69,9 @@ function App() {
         <div className="app">
           <nav className="navbar">
             <div className="nav-container">
-              <h1 className="logo">BabyWise Web</h1>
+              <Link to="/" className="logo-link">
+                <h1 className="logo">BabyWise</h1>
+              </Link>
               <div className="nav-right">
                 <ul className="nav-links">
                   {navRoutes.map((route) => (
@@ -149,10 +151,6 @@ function App() {
             </Routes>
           </Suspense>
         </main>
-
-        <footer className="footer">
-          <p>&copy; 2025 BabyWise. Todos los derechos reservados.</p>
-        </footer>
       </div>
     </Router>
     </SocketProvider>
