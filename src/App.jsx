@@ -149,10 +149,6 @@ function App() {
             </Routes>
           </Suspense>
         </main>
-
-        <footer className="footer">
-          <p>&copy; 2025 BabyWise. Todos los derechos reservados.</p>
-        </footer>
       </div>
     </Router>
     </SocketProvider>
