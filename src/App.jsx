@@ -69,7 +69,9 @@ function App() {
         <div className="app">
           <nav className="navbar">
             <div className="nav-container">
-              <h1 className="logo">BabyWise Web</h1>
+              <Link to="/" className="logo-link">
+                <h1 className="logo">BabyWise</h1>
+              </Link>
               <div className="nav-right">
                 <ul className="nav-links">
                   {navRoutes.map((route) => (

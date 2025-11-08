@@ -137,7 +137,11 @@
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 2rem;
-  animation: fadeInDown 0.8s ease;
+}
+
+.badge-icon {
+  display: inline-flex;
+  cursor: pointer;
 }
 
 .hero-title {
@@ -146,7 +150,6 @@
   line-height: 1.2;
   color: var(--color-text);
   margin-bottom: 1.5rem;
-  animation: fadeInUp 0.8s ease 0.2s both;
 }
 
 .gradient-text {
@@ -168,14 +171,12 @@
   color: var(--color-text-light);
   line-height: 1.8;
   margin-bottom: 2.5rem;
-  animation: fadeInUp 0.8s ease 0.4s both;
 }
 
 .hero-buttons {
   display: flex;
   gap: 1rem;
   margin-bottom: 3rem;
-  animation: fadeInUp 0.8s ease 0.6s both;
 }
 
 .btn {
@@ -233,7 +234,6 @@
 .hero-stats {
   display: flex;
   gap: 3rem;
-  animation: fadeInUp 0.8s ease 0.8s both;
 }
 
 .stat h3 {
@@ -253,7 +253,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeInRight 0.8s ease 0.4s both;
 }
 
 .phone-mockup {
@@ -334,13 +333,7 @@
   border-radius: 16px;
   box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
-  animation: fadeInUp 0.6s ease both;
 }
-
-.problem-card:nth-child(1) { animation-delay: 0.1s; }
-.problem-card:nth-child(2) { animation-delay: 0.2s; }
-.problem-card:nth-child(3) { animation-delay: 0.3s; }
-.problem-card:nth-child(4) { animation-delay: 0.4s; }
 
 .problem-card:hover {
   transform: translateY(-8px);
@@ -377,7 +370,6 @@
   border: 1px solid rgba(63, 200, 175, 0.1);
   text-align: center;
   transition: all 0.4s ease;
-  animation: fadeInUp 0.6s ease both;
 }
 
 .feature-card:hover {
@@ -390,13 +382,8 @@
   font-size: 3.5rem;
   color: var(--color-primary);
   margin-bottom: 1.5rem;
-  display: inline-block;
-  animation: bounce 2s ease infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  display: inline-flex;
+  cursor: pointer;
 }
 
 .feature-card h3 {
@@ -579,6 +566,11 @@
   margin-bottom: 1rem;
 }
 
+.star-wrapper {
+  display: inline-flex;
+  cursor: pointer;
+}
+
 .testimonial-text {
   font-size: 1.1rem;
   line-height: 1.7;
@@ -623,12 +615,7 @@
   padding: 2.5rem;
   text-align: center;
   transition: all 0.3s ease;
-  animation: fadeInUp 0.6s ease both;
 }
-
-.pricing-card:nth-child(1) { animation-delay: 0.1s; }
-.pricing-card:nth-child(2) { animation-delay: 0.2s; }
-.pricing-card:nth-child(3) { animation-delay: 0.3s; }
 
 .pricing-card.highlight {
   border-color: var(--color-primary);
@@ -686,6 +673,12 @@
   color: var(--color-text);
 }
 
+.check-icon-wrapper {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.check-icon-wrapper svg,
 .features-list svg {
   color: var(--color-primary);
   font-size: 1.2rem;

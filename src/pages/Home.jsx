@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import Tilt from 'react-parallax-tilt';
 import { 
   MdBabyChangingStation, 
   MdVideocam, 
@@ -13,6 +16,223 @@ import {
   MdStars
 } from 'react-icons/md';
 import './Home.css';
+
+// Component for Features with scroll animations
+const FeaturesSectionWithAnimation = ({ features }) => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  return (
+    <section className="section features-section" ref={ref}>
+      <div className="section-content">
+        <motion.h2 
+          className="section-title"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          Tecnología que marca la diferencia
+        </motion.h2>
+        <motion.p 
+          className="section-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Características diseñadas para darte tranquilidad absoluta
+        </motion.p>
+        <div className="features-grid">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Tilt
+                tiltMaxAngleX={10}
+                tiltMaxAngleY={10}
+                scale={1.05}
+                transitionSpeed={2000}
+              >
+                <div className="feature-card">
+                  <motion.div 
+                    className="feature-icon"
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    {feature.icon}
+                  </motion.div>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
+              </Tilt>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Component for Pricing with scroll animations
+const PricingSectionWithAnimation = ({ pricing, navigate }) => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  return (
+    <section className="section pricing-section" ref={ref}>
+      <div className="section-content">
+        <motion.h2 
+          className="section-title"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          Planes para cada familia
+        </motion.h2>
+        <motion.p 
+          className="section-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Comienza gratis, actualiza cuando lo necesites
+        </motion.p>
+        <div className="pricing-grid">
+          {pricing.map((plan, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
+            >
+              <Tilt
+                tiltMaxAngleX={5}
+                tiltMaxAngleY={5}
+                scale={plan.highlight ? 1.05 : 1.02}
+                transitionSpeed={2000}
+              >
+                <motion.div 
+                  className={`pricing-card ${plan.highlight ? 'highlight' : ''}`}
+                  whileHover={{ y: -10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  {plan.highlight && <div className="badge">Más popular</div>}
+                  <h3>{plan.name}</h3>
+                  <motion.div 
+                    className="price"
+                    initial={{ scale: 0 }}
+                    animate={inView ? { scale: 1 } : {}}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 200, 
+                      delay: 0.3 + index * 0.15 
+                    }}
+                  >
+                    {plan.price}
+                  </motion.div>
+                  <ul className="features-list">
+                    {plan.features.map((feature, i) => (
+                      <motion.li 
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={inView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.4 + index * 0.15 + i * 0.05 }}
+                      >
+                        <motion.div
+                          className="check-icon-wrapper"
+                          whileHover={{ scale: 1.3, rotate: 360 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <MdCheckCircle />
+                        </motion.div>
+                        {feature}
+                      </motion.li>
+                    ))}
+                  </ul>
+                  <motion.button 
+                    className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
+                    onClick={() => navigate('/groups')}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {plan.price === "Gratis" ? "Comenzar ahora" : "Elegir plan"}
+                  </motion.button>
+                </motion.div>
+              </Tilt>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Component for Problem Section with scroll animations
+const ProblemSectionWithAnimation = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  const problems = [
+    {
+      title: "Noches sin dormir",
+      description: "Levantarse constantemente para revisar al bebé te agota física y mentalmente"
+    },
+    {
+      title: "Ansiedad constante",
+      description: "La preocupación por tu bebé no te deja concentrarte en el trabajo o descansar"
+    },
+    {
+      title: "Monitores básicos",
+      description: "Los sistemas tradicionales no ofrecen la calidad ni las funciones que necesitas"
+    },
+    {
+      title: "Costos elevados",
+      description: "Soluciones profesionales con precios inaccesibles y contratos largos"
+    }
+  ];
+
+  return (
+    <section className="section problem-section" ref={ref}>
+      <div className="section-content">
+        <motion.h2 
+          className="section-title"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          El problema que resolvemos
+        </motion.h2>
+        <div className="problem-grid">
+          {problems.map((problem, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <motion.div 
+                className="problem-card"
+                whileHover={{ y: -5, boxShadow: "0 8px 30px rgba(0, 0, 0, 0.15)" }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h3>{problem.title}</h3>
+                <p>{problem.description}</p>
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Home = () => {
   const navigate = useNavigate();
@@ -123,111 +343,135 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-badge">
-            <MdStars /> Tecnología de vanguardia
-          </div>
-          <h1 className="hero-title">
+        <motion.div 
+          className="hero-content"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <motion.div 
+            className="hero-badge"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <motion.div 
+              className="badge-icon"
+              whileHover={{ scale: 1.2, rotate: 360 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <MdStars />
+            </motion.div>
+            Monitoreo inteligente con IA
+          </motion.div>
+          <motion.h1 
+            className="hero-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          >
             Un asistente siempre atento,
             <br />
             <span className="gradient-text">para que vos descanses</span>
-          </h1>
-          <p className="hero-subtitle">
+          </motion.h1>
+          <motion.p 
+            className="hero-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
             El monitor inteligente que revoluciona el cuidado infantil con IA, 
             streaming de alta calidad y análisis en tiempo real
-          </p>
-          <div className="hero-buttons">
-            <button 
+          </motion.p>
+          <motion.div 
+            className="hero-buttons"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
+            <motion.button 
               className="btn btn-primary"
               onClick={() => navigate('/groups')}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(63, 200, 175, 0.3)" }}
+              whileTap={{ scale: 0.95 }}
             >
               Comenzar gratis
               <MdArrowForward />
-            </button>
-            <button 
+            </motion.button>
+            <motion.button 
               className="btn btn-secondary"
               onClick={() => navigate('/about')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Conocer más
-            </button>
-          </div>
-          <div className="hero-stats">
-            <div className="stat">
-              <h3>50K+</h3>
-              <p>Familias confiando</p>
-            </div>
-            <div className="stat">
-              <h3>4.9/5</h3>
-              <p>Calificación promedio</p>
-            </div>
-            <div className="stat">
-              <h3>99.9%</h3>
-              <p>Tiempo activo</p>
-            </div>
-          </div>
-        </div>
-        <div className="hero-visual">
-          <div className="phone-mockup">
-            <div className="phone-screen">
-              <div className="mockup-content">
-                <img 
-                  src="/babywise-logo.png" 
-                  alt="BabyWise Logo" 
-                  className="mockup-logo"
-                />
+            </motion.button>
+          </motion.div>
+          <motion.div 
+            className="hero-stats"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            {[
+              { value: "50K+", label: "Familias confiando" },
+              { value: "4.9/5", label: "Calificación promedio" },
+              { value: "99.9%", label: "Tiempo activo" }
+            ].map((stat, index) => (
+              <motion.div 
+                key={index}
+                className="stat"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 + index * 0.1, duration: 0.6 }}
+              >
+                <h3>{stat.value}</h3>
+                <p>{stat.label}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+        <motion.div 
+          className="hero-visual"
+          initial={{ opacity: 0, x: 50, rotateY: -15 }}
+          animate={{ opacity: 1, x: 0, rotateY: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+        >
+          <Tilt
+            tiltMaxAngleX={5}
+            tiltMaxAngleY={5}
+            scale={1.02}
+            transitionSpeed={2000}
+          >
+            <div className="phone-mockup">
+              <div className="phone-screen">
+                <div className="mockup-content">
+                  <motion.img 
+                    src="/babywise-logo.png" 
+                    alt="BabyWise Logo" 
+                    className="mockup-logo"
+                    animate={{ 
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{ 
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </Tilt>
+        </motion.div>
       </section>
 
       {/* Problem Section */}
-      <section className="section problem-section">
-        <div className="section-content">
-          <h2 className="section-title">El problema que resolvemos</h2>
-          <div className="problem-grid">
-            <div className="problem-card">
-              <h3>Noches sin dormir</h3>
-              <p>Levantarse constantemente para revisar al bebé te agota física y mentalmente</p>
-            </div>
-            <div className="problem-card">
-              <h3>Ansiedad constante</h3>
-              <p>La preocupación por tu bebé no te deja concentrarte en el trabajo o descansar</p>
-            </div>
-            <div className="problem-card">
-              <h3>Monitores básicos</h3>
-              <p>Los sistemas tradicionales no ofrecen la calidad ni las funciones que necesitas</p>
-            </div>
-            <div className="problem-card">
-              <h3>Costos elevados</h3>
-              <p>Soluciones profesionales con precios inaccesibles y contratos largos</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProblemSectionWithAnimation />
 
       {/* Features Section */}
-      <section className="section features-section">
-        <div className="section-content">
-          <h2 className="section-title">Tecnología que marca la diferencia</h2>
-          <p className="section-subtitle">
-            Características diseñadas para darte tranquilidad absoluta
-          </p>
-          <div className="features-grid">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="feature-card"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="feature-icon">{feature.icon}</div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FeaturesSectionWithAnimation features={features} />
+      
 
       {/* Benefits Section */}
       <section className="section benefits-section">
@@ -237,16 +481,33 @@ const Home = () => {
               <h2 className="section-title">Todo lo que necesitas en un solo lugar</h2>
               <ul className="benefits-list">
                 {benefits.map((benefit, index) => (
-                  <li key={index}>
-                    <MdCheckCircle className="check-icon" />
+                  <motion.li 
+                    key={index}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    viewport={{ once: true }}
+                  >
+                    <motion.div
+                      className="check-icon-wrapper"
+                      whileHover={{ scale: 1.3, rotate: 360 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <MdCheckCircle className="check-icon" />
+                    </motion.div>
                     <span>{benefit}</span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
             <div className="benefits-visual">
               <div className="device-showcase">
-                <MdDevices className="device-icon" />
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <MdDevices className="device-icon" />
+                </motion.div>
                 <p>Compatible con iOS, Android y navegadores web</p>
               </div>
             </div>
@@ -259,27 +520,71 @@ const Home = () => {
         <div className="section-content">
           <h2 className="section-title">Comienza en 3 simples pasos</h2>
           <div className="steps-container">
-            <div className="step">
-              <div className="step-number">1</div>
+            <motion.div 
+              className="step"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="step-number"
+                whileHover={{ scale: 1.2, rotate: 360 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                1
+              </motion.div>
               <h3>Descarga</h3>
               <p>Instala la app en tu teléfono o accede desde el navegador</p>
-            </div>
-            <div className="step-arrow">
+            </motion.div>
+            <motion.div 
+              className="step-arrow"
+              whileHover={{ scale: 1.3, x: 10 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <MdArrowForward />
-            </div>
-            <div className="step">
-              <div className="step-number">2</div>
+            </motion.div>
+            <motion.div 
+              className="step"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="step-number"
+                whileHover={{ scale: 1.2, rotate: 360 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                2
+              </motion.div>
               <h3>Configura</h3>
               <p>Crea tu cuenta y conecta tus dispositivos en minutos</p>
-            </div>
-            <div className="step-arrow">
+            </motion.div>
+            <motion.div 
+              className="step-arrow"
+              whileHover={{ scale: 1.3, x: 10 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <MdArrowForward />
-            </div>
-            <div className="step">
-              <div className="step-number">3</div>
+            </motion.div>
+            <motion.div 
+              className="step"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="step-number"
+                whileHover={{ scale: 1.2, rotate: 360 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                3
+              </motion.div>
               <h3>Monitorea</h3>
               <p>Disfruta de tranquilidad 24/7 con nuestro sistema inteligente</p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -290,10 +595,25 @@ const Home = () => {
           <h2 className="section-title">Lo que dicen nuestras familias</h2>
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="testimonial-card">
+              <motion.div 
+                key={index} 
+                className="testimonial-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+              >
                 <div className="stars">
                   {[...Array(5)].map((_, i) => (
-                    <MdStars key={i} />
+                    <motion.div
+                      key={i}
+                      className="star-wrapper"
+                      whileHover={{ scale: 1.3, rotate: 360 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <MdStars />
+                    </motion.div>
                   ))}
                 </div>
                 <p className="testimonial-text">"{testimonial.text}"</p>
@@ -301,47 +621,14 @@ const Home = () => {
                   <strong>{testimonial.name}</strong>
                   <span>{testimonial.role}</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="section pricing-section">
-        <div className="section-content">
-          <h2 className="section-title">Planes para cada familia</h2>
-          <p className="section-subtitle">
-            Comienza gratis, actualiza cuando lo necesites
-          </p>
-          <div className="pricing-grid">
-            {pricing.map((plan, index) => (
-              <div 
-                key={index} 
-                className={`pricing-card ${plan.highlight ? 'highlight' : ''}`}
-              >
-                {plan.highlight && <div className="badge">Más popular</div>}
-                <h3>{plan.name}</h3>
-                <div className="price">{plan.price}</div>
-                <ul className="features-list">
-                  {plan.features.map((feature, i) => (
-                    <li key={i}>
-                      <MdCheckCircle />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button 
-                  className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
-                  onClick={() => navigate('/groups')}
-                >
-                  {plan.price === "Gratis" ? "Comenzar ahora" : "Elegir plan"}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <PricingSectionWithAnimation pricing={pricing} navigate={navigate} />
 
       {/* Final CTA */}
       <section className="section cta-section">
