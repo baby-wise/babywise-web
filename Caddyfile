@@ -1,9 +1,9 @@
-:{$PORT}
-
-root * /app/dist
-encode gzip
-
-# Handle client-side routing (SPA)
-try_files {path} {path}/ /index.html
-
-file_server
+:8080 {
+    root * /app/dist
+    encode gzip
+    
+    # Handle client-side routing (SPA)
+    try_files {path} /index.html
+    
+    file_server
+}
