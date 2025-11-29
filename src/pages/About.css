@@ -279,21 +279,93 @@
   opacity: 0.95;
 }
 
-.cta-button {
+.email-icon-wrapper {
+  font-size: 4rem;
+  color: white;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.newsletter-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.email-input {
+  flex: 1;
+  padding: 16px 20px;
+  font-size: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.email-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.email-input:focus {
+  outline: none;
+  border-color: white;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.subscribe-button {
   background: white;
   color: var(--color-primary);
-  padding: 16px 40px;
-  font-size: 1.1rem;
+  padding: 16px 32px;
+  font-size: 1rem;
   font-weight: 600;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-.cta-button:hover {
+.subscribe-button:hover {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.privacy-note {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.success-message {
+  text-align: center;
+  padding: 2rem;
+}
+
+.success-icon {
+  font-size: 4rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.success-message h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.success-message p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+  margin: 0;
 }
 
 /* Responsive */
@@ -335,6 +407,19 @@
 
   .mission-stats {
     grid-template-columns: 1fr;
+  }
+
+  .input-wrapper {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .subscribe-button {
+    width: 100%;
+  }
+
+  .about-cta h2 {
+    font-size: 1.8rem;
   }
 }
 

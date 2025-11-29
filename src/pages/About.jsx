@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Tilt from 'react-parallax-tilt';
@@ -9,11 +10,15 @@ import {
   MdCloud,
   MdSmartToy,
   MdVideoLibrary,
-  MdAnalytics
+  MdAnalytics,
+  MdEmail,
+  MdCheckCircle
 } from 'react-icons/md';
 import './About.css';
 
 const About = () => {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [missionRef, missionInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [valuesRef, valuesInView] = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -325,16 +330,63 @@ const About = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2>¿Listo para unirte a nosotros?</h2>
-          <p>Miles de familias ya confían en BabyWise para cuidar lo que más aman</p>
-          <motion.button
-            className="cta-button"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.location.href = '/groups'}
+          <motion.div
+            className="email-icon-wrapper"
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            Comenzar ahora
-          </motion.button>
+            <MdEmail />
+          </motion.div>
+          <h2>¿Querés saber más sobre BabyWise?</h2>
+          <p>Dejanos tu email y te mantendremos informado sobre nuevas funciones, consejos y novedades</p>
+          
+          {!subscribed ? (
+            <motion.form
+              className="newsletter-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (email) {
+                  setSubscribed(true);
+                  // Aquí iría la integración con tu backend
+                  console.log('Email suscrito:', email);
+                }
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="input-wrapper">
+                <input
+                  type="email"
+                  placeholder="tu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="email-input"
+                />
+                <motion.button
+                  type="submit"
+                  className="subscribe-button"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Suscribirme
+                </motion.button>
+              </div>
+              <p className="privacy-note"><MdEmail /> Sin spam. Podés cancelar cuando quieras.</p>
+            </motion.form>
+          ) : (
+            <motion.div
+              className="success-message"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 200 }}
+            >
+              <MdCheckCircle className="success-icon" />
+              <h3>¡Gracias por suscribirte!</h3>
+              <p>Te mantendremos al día con las últimas novedades de BabyWise</p>
+            </motion.div>
+          )}
         </motion.div>
       </section>
 
